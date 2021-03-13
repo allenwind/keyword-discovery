@@ -27,7 +27,7 @@ def cut_ngrams(text, n):
 class NgramsCounter:
     """统计文本序列ngrams"""
 
-    _pattern = re.compile("[^0-9a-zA-Z\u4e00-\u9fa5]+")
+    _pattern = re.compile("[^0-9a-zA-Z\u4E00-\u9FD5#&\._%\-]+")
 
     def __init__(self, n):
         self.n = n
