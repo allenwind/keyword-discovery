@@ -29,7 +29,7 @@ class NgramsCounter:
 
     _pattern = re.compile("[^0-9a-zA-Z\u4e00-\u9fa5]+")
 
-    def __init__(self, n=4):
+    def __init__(self, n):
         self.n = n
         # 可以使用Trie优化存储
         self._ngrams = collections.defaultdict(int)
@@ -88,7 +88,7 @@ if __name__ == "__main__":
         "人的复杂的生理系统的特性注定了一件事情，就是从懂得某个道理到执行之间，是一个漫长的回路。"
     ]
 
-    c = NgramsCounter(4)
+    c = NgramsCounter(n=3)
     c.fit(texts)
     print(c.ngrams)
     print()
