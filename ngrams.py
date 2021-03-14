@@ -1,6 +1,7 @@
 import re
 import collections
 import heapq
+import json
 from operator import itemgetter
 
 class _lazyproperty:
@@ -22,7 +23,8 @@ def cut_ngrams(text, n):
     for i in range(size):
         for j in range(1, n+1):
             if i + j <= size:
-                yield text[i:i+j], (i, i+j)
+                k = i + j
+                yield text[i:k], (i, k)
 
 class NgramsCounter:
     """统计文本序列ngrams"""
@@ -50,7 +52,22 @@ class NgramsCounter:
         for i in range(size):
             for j in range(1, self.n+1):
                 if i + j <= size:
-                    yield block[i:i+j], (i, i+j)
+                    k = i + j
+                    yield block[i:k], (i, k)
+
+    def save(self, file):
+        with open(file, "w") as fp:
+            json.dump(
+                self._ngrams,
+                fp,
+                indent=4,
+                ensure_ascii=False,
+                sort_keys=True
+            )
+
+    def load(self, file):
+        with open(file, "r") as fp:
+            self._ngrams = json.load(fp)
 
     @property
     def ngrams(self):
@@ -90,6 +107,7 @@ if __name__ == "__main__":
 
     c = NgramsCounter(n=3)
     c.fit(texts)
+    c.save("ngrams.txt")
     print(c.ngrams)
     print()
     print(c.most_common(100))
