@@ -42,6 +42,12 @@ class NgramsCounter:
                 for ngram, _ in self.cut_ngrams(block):
                     self._ngrams[ngram] += 1
 
+    def yield_ngrams(self, texts):
+        for text in texts:
+            for block in self.split_blocks(text):
+                for ngram, _ in self.cut_ngrams(block):
+                    yield ngram
+
     def split_blocks(self, text):
         for block in self._pattern.split(text):
             if block:
@@ -105,7 +111,8 @@ if __name__ == "__main__":
         "人的复杂的生理系统的特性注定了一件事情，就是从懂得某个道理到执行之间，是一个漫长的回路。"
     ]
 
-    c = NgramsCounter(n=3)
+    n = 5
+    c = NgramsCounter(n)
     c.fit(texts)
     c.save("ngrams.txt")
     print(c.ngrams)
@@ -114,5 +121,5 @@ if __name__ == "__main__":
     print(c.vocab_size)
     print(c.total_size)
 
-    for ngram in cut_ngrams(texts[0], 4):
+    for ngram in cut_ngrams(texts[0], n):
         print(ngram)
